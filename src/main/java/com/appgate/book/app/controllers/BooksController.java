@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -42,6 +43,13 @@ public class BooksController {
 		return new ResponseEntity<>(bookList, HttpStatus.OK);
 	}
 
+	@GetMapping("/byauthor/{author}")
+	public ResponseEntity<List<Book>> getByAuthor(@PathVariable String author) {
+		LOGGER.info("GET BY AUTHOR: {}", author);
+		List<Book> bookList = service.getBookByAuthor(author);
+		return new ResponseEntity<>(bookList, HttpStatus.OK);
+	}
+
 	@PostMapping("/save")
 	public ResponseEntity<Book> saveBook(@RequestBody Book book) {
 		LOGGER.info("SAVE BOOK: {}", book.getTitle());
@@ -55,4 +63,25 @@ public class BooksController {
 		Book bookSave = service.updateBook(book);
 		return new ResponseEntity<>(bookSave, bookSave == null ? HttpStatus.NOT_FOUND : HttpStatus.OK);
 	}
+
+	@PostMapping("/delete")
+	public ResponseEntity<Book> deleteBook(@RequestBody Book book) {
+		LOGGER.info("DELETE BOOK: {}", book.getId());
+		Book bookDelete = service.deleteBook(book);
+		return new ResponseEntity<>(bookDelete, bookDelete == null ? HttpStatus.NOT_FOUND : HttpStatus.OK);
+	}
+
+	@PostMapping("/upload")
+	public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+		String message = "";
+		try {
+			Iterable<Book> books = service.store(file);
+			message = "Uploaded the file successfully: " + file.getOriginalFilename();
+			return new ResponseEntity<>(message, HttpStatus.OK);
+		} catch (Exception e) {
+			message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+			return new ResponseEntity<>(message, HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+
 }

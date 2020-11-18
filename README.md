@@ -8,6 +8,25 @@
 >
 >Arquitectura MVC
 >
+>Archivo de ejemplo de para subir datos por upload exampleUploadFile.json
+>
+>POST http://localhost:8080/books/upload
+>
+>POST http://localhost:8080/books/delete
+>
+>POST http://localhost:8080/books/update
+>
+>POST http://localhost:8080/books/save
+>
+>GET http://localhost:8080/books/byid
+>
+>GET http://localhost:8080/books/byauthor
+>
+>GET http://localhost:8080/books/bytitle
+>
+>GET http://localhost:8080/books/list
+>> http://localhost:8080/books/
+>>> http://localhost:8080/books
 
 #Prerequisitos
 
